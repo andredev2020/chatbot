@@ -7,6 +7,16 @@ Created on Tue May 31 19:07:12 2022
 
 import sys
 
+class ReinforcementAlgorithm:
+    
+    def __init__(self):
+        pass
+
+class Environment:
+    
+    def __init__(self):
+        pass
+
 
 class Chatbot:
     
