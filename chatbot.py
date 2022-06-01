@@ -16,6 +16,13 @@ class Environment:
     
     def __init__(self):
         pass
+    
+class ANN_BERT:
+    
+    def __init__(self):
+        pass
+    
+    
 
 
 class Chatbot:
