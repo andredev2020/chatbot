@@ -63,9 +63,10 @@ class MyEnvironment:
 class myAgent:
    def __init__(self):
      self.total_rewards=0.0
+     self.dict_mapping={}
      
    def step(self,ob:MyEnvironment):
-     dict_mapping = {}
+     
      
      list_obs = ob.get_observation()
      list_actions = ob.get_actions()
@@ -74,19 +75,39 @@ class myAgent:
      curr_obs=random.choice(list_obs)
      print(curr_obs)
      
-     if (pd.Series([curr_obs in i for i in dict_mapping.keys()]).sum())<=1:
-         curr_action=random.choice(list_actions)
-     elif (pd.Series([curr_obs in i for i in dict_mapping.keys()]).sum())==2:
-         for num,j in [i for i in dict_mapping.keys() if curr_obs in i]:
+   
+         
+     if (pd.Series([curr_obs in i for i in self.dict_mapping.keys()]).sum())==2:
+         for num,j in enumerate([i for i in self.dict_mapping.keys() if curr_obs in i ]):
              if num==0:
-                 res = dict_mapping[j]
+                 res = self.dict_mapping[j]
+                 res_key = j
              else:
-                 res = max(res,dict_mapping[j])
-         
-         list_actions = list(set(list_actions) - set([re.split(i)[0] for i in dict_mapping.keys() if curr_obs in i])).append()         
-                 
+                 if self.dict_mapping[j]> res:
+                     res = self.dict_mapping[j]
+                     res_key = j
+                     
 
+    
+
+         tmp_list = list(set(list_actions) - set([re.split("-",i)[1] for i in self.dict_mapping.keys() if curr_obs in i]))
+         tmp_list.append(re.split("-",res_key)[1])
+         list_actions = tmp_list        
+       
+     curr_action=random.choice(list_actions) 
+    
+     if (pd.Series([curr_obs in i for i in self.dict_mapping.keys()]).sum())==3:
+         for num,j in enumerate([i for i in self.dict_mapping.keys() if curr_obs in i ]):
+             if num==0:
+                 res = self.dict_mapping[j]
+                 res_key = j
+             else:
+                 if self.dict_mapping[j]> res:
+                     res = self.dict_mapping[j]
+                     res_key = j                     
+                 curr_action = re.split("-",res_key)[1] #list(self.dict_mapping.keys())[list(self.dict_mapping.values()).index(res)]
          
+  
 
      
      print(curr_action)
@@ -96,7 +117,7 @@ class myAgent:
      
      
      
-     dict_mapping[curr_obs+"-" +curr_action]=curr_reward
+     self.dict_mapping[curr_obs+"-" +curr_action]=curr_reward
          
      
      print("Total rewards so far= %.3f "%self.total_rewards)
